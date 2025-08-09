@@ -20,7 +20,7 @@ rclc_support_t support;
 rclc_executor_t executor;
 
 #define LED_PIN 4
-#define RCCHECK(x) if((x) != RCL_RET_OK){Serial.println("❌ RCCHECK lỗi"); error_loop();}
+#define RCCHECK(x) if((x) != RCL_RET_OK){Serial.println(" RCCHECK lỗi"); error_loop();}
 #define RCSOFTCHECK(x) if((x) != RCL_RET_OK){}
 
 void error_loop() {
