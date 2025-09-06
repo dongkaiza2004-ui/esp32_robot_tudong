@@ -3,11 +3,17 @@
 #include "pid.h"
 #define pi 3.1415926f
 extern const int pulses_per_rev;
+extern int pulses_n ;
 extern float R; 
 extern float L;
 extern float v;
 extern float w;
 extern float x;
+extern float kt;
+extern float straight;
+extern float straight2;
+extern float straight3;
+extern float straight4;
 extern float v_feedback;
 extern float w_feedback;
 extern float base_freq;
@@ -27,6 +33,7 @@ extern int dir_r;
 extern int dir_l;
 float RPS_to_speed(float RPS);
 float speed_to_RPS(float v);
+void math_cung(float n);
 void speed_R_L(float v,float w,float &freq_l, float &freq_r);
 void freq_to_speed(float freq_l, float freq_r); 
 

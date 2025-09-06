@@ -28,6 +28,43 @@ void ROS_Task(void *parameter) {
 void Motor_Task(void *parameter) {
   esp_task_wdt_add(NULL); 
   for (;;) {
+    if(kt > 0){
+      if(straight > 1){
+        straight --;
+        speed_R_L(-0.2, 0, target_freq_l, target_freq_r);
+      }
+      else{
+        if(pulses_n > 0){
+          speed_R_L(0, 0.5, target_freq_l, target_freq_r);
+        }
+        else{
+          if(straight2 > 0){
+            straight2--;
+            speed_R_L(0.5, 0, target_freq_l, target_freq_r);
+          }
+          else{
+            x = 100;
+            if(straight3 > 0){
+              straight3--;
+              speed_R_L(0, 0, target_freq_l, target_freq_r);
+            }
+            else{
+              if(straight4 > 0){
+                straight4--;
+                speed_R_L(-0.5, 0, target_freq_l, target_freq_r);
+              }
+              else{
+                kt = 0;
+                x= 0;
+                speed_R_L(0, 0, target_freq_l, target_freq_r);
+              }
+            }
+          }
+
+        }
+      }
+
+    }
     Control_Task(); 
     esp_task_wdt_reset(); 
     vTaskDelay(pdMS_TO_TICKS(5));
@@ -50,8 +87,17 @@ void setup() {
 }
 
 void loop() {
-  Serial.printf("v = %.2f, w = %.2f, x = %.2f\n", v,w,x);
-
+  // Serial.printf("v = %.2f, w = %.2f, x = %.2f\n", v,w,x);
+  // Serial.print(pulses_n);
+  // Serial.print("\n");
+  if(straight == 1){
+    if(pulses_n > 0){
+      if(flag_motor_l_a){
+          pulses_n--;
+          flag_motor_l_a = false;
+      }
+    }
+  }
   pwm_x = int(x);
   control_x();
 }

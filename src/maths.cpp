@@ -6,7 +6,11 @@ float w = 0;
 float x = 0;
 float R = 0.035; 
 float L = 0.33;
-
+float kt = 0;
+float straight = 0;
+float straight2 = 0;
+float straight3 = 0;
+float straight4 = 0;
 float base_freq = 0;
 float target_freq_l = base_freq;
 float target_freq_r = base_freq;
@@ -27,7 +31,7 @@ volatile bool control_flag = false;
 
 float v_feedback = 0;
 float w_feedback = 0;
-
+int pulses_n = 0;
 const int pulses_per_rev = 390;
 float RPS_to_speed(float RPS){
     return (2*pi*RPS*R);
@@ -52,5 +56,9 @@ void freq_to_speed(float freq1_l, float freq1_r) {
 
     v_feedback = (v_l + v_r) / 2.0f;
     w_feedback = (v_r - v_l) / L;
-
+}
+void math_cung(float n){
+    float l = (pi*n*(L/2))/180;
+    float d = 2*pi*R;
+    pulses_n = l*480/d;
 }

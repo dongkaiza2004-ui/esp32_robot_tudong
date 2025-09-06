@@ -29,11 +29,14 @@ void error_loop() {
     delay(100);
   }
 }
-
-const char * ssid = "IEC lab";
-const char * password = "roboticsptit";
-const char * ip_address = "192.168.2.176";
+const char * ssid = "PTIT-RD-01";
+const char * password = "11246879";
+const char * ip_address = "192.168.0.131";
 const uint16_t port = 8888;
+// const char * ssid = "IEC lab";
+// const char * password = "roboticsptit";
+// const char * ip_address = "192.168.2.130";
+// const uint16_t port = 8888;
 void Odometry_Init() {
   rosidl_runtime_c__String__assign(&odom_msg.header.frame_id, "odom");
   rosidl_runtime_c__String__assign(&odom_msg.child_frame_id, "base_footprint");
@@ -44,7 +47,7 @@ void ROS_Send_Feedback_Odom() {
   odom_msg.header.stamp.nanosec = (now % 1000) * 1000000;
 
   freq_to_speed(freq_l, freq_r);
-  Serial.printf("v = %.2f, w = %.2f\n", v_feedback,w_feedback);
+  // Serial.printf("v = %.2f, w = %.2f\n", v_feedback,w_feedback);
   odom_msg.twist.twist.linear.x = v_feedback; 
   odom_msg.twist.twist.angular.z = w_feedback;
 
@@ -57,6 +60,18 @@ void subscription_callback(const void *msgin) {
   v = msg->linear.x;
   x = msg->linear.y;
   w = msg->angular.z;
+  kt = msg->angular.x;
+  if(kt > 0){
+    math_cung(180);
+    straight = 500;
+    straight2 = 600;
+    straight3 = 800;
+    straight4 = 700;
+  }
+  // if(k>0){
+  //   Serial.print("da nhan n");
+  //   math_cung(n);
+  // }
   speed_R_L(v, w, target_freq_l, target_freq_r);
 
 }
