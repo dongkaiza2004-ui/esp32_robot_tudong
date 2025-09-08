@@ -37,7 +37,7 @@ void control_x(){
 void control_cung(int speed){
     Motor_Control(R_MOTOR, speed , FORWARD);
     Motor_Control(L_MOTOR, speed, FORWARD);
-    Serial.print("da dieu khien \n");
+    // Serial.print("da dieu khien \n");
 }
 void Control_Task() {
     freq_r = Motor_Encoder_Right_A();
@@ -74,6 +74,9 @@ void Control_Task() {
     Motor_Control(L_MOTOR, abs(pwm_l), pwm_l >= 0 ? FORWARD : BACKWARD);
 }
 void IRAM_ATTR Encoder_Right_A() {
+    // if(pulses_n_r > 0){
+    //     pulses_n_r--;
+    // }
     flag_motor_r_a = true;
     unsigned long currentTime = micros();
     uint16_t encoder_cycle_r = currentTime - lastTime_r_a;
@@ -97,6 +100,9 @@ void IRAM_ATTR Encoder_Right_B(){
 }
 
 void IRAM_ATTR Encoder_Left_A() {
+    // if(pulses_n_l > 0){
+    //     pulses_n_l--;
+    // }
     flag_motor_l_a = true;
     unsigned long currentTime = micros();
     uint16_t encoder_cycle_l = currentTime - lastTime_l_a;

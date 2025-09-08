@@ -7,16 +7,20 @@ float x = 0;
 float R = 0.035; 
 float L = 0.33;
 float kt = 0;
+
 float straight = 0;
-float straight2 = 0;
-float straight3 = 0;
-float straight4 = 0;
+int TH = 0;
+float ok = 0;
+float finish;
+
 float base_freq = 0;
 float target_freq_l = base_freq;
 float target_freq_r = base_freq;
 
 float freq_r = 0;
 float freq_l = 0;
+
+int flag = 0;
 
 float rpm_r;
 float rpm_l;
@@ -31,7 +35,8 @@ volatile bool control_flag = false;
 
 float v_feedback = 0;
 float w_feedback = 0;
-int pulses_n = 0;
+int pulses_n_l = 0;
+int pulses_n_r = 0;
 const int pulses_per_rev = 390;
 float RPS_to_speed(float RPS){
     return (2*pi*RPS*R);
@@ -60,5 +65,97 @@ void freq_to_speed(float freq1_l, float freq1_r) {
 void math_cung(float n){
     float l = (pi*n*(L/2))/180;
     float d = 2*pi*R;
-    pulses_n = l*480/d;
+    pulses_n_l = l*480/d;
+    pulses_n_l = pulses_n_r;
+}
+void math_control1(){
+    switch (TH)
+    {
+    case 1:
+        Serial.print("da va case 1\n");
+        speed_R_L(0.2, 0, target_freq_l, target_freq_r);
+        straight-- ;
+        if(straight < 1){
+            TH = 2;
+            straight = 700;
+        }
+        break;
+    case 2:
+        Serial.print("da va case 2\n");
+        speed_R_L(0.1, 0.4, target_freq_l, target_freq_r);
+        straight-- ;
+        if(straight < 1){
+            TH = 3;
+            straight = 2200;
+        }   
+        break; 
+    case 3 :
+        Serial.print("da va case 3\n");
+        speed_R_L(0.2, 0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 4;
+        }
+        break;
+    
+    default:
+        Serial.print("da va case 4\n");
+        finish = 1;
+        speed_R_L(0, 0, target_freq_l, target_freq_r);
+        ok = 0;
+        break;
+    }
+}
+void math_control2(){
+    switch (TH)
+    {
+    case 1:
+        Serial.print("da vao tra bong case1 \n");
+        speed_R_L(-0.2, 0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 2;
+            straight = 1200;
+        }
+        break;
+    case 2:
+        Serial.print("da vao tra bong case2 \n");
+        speed_R_L(0, 0.5, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 3;
+            straight = 700;
+        }   
+        break; 
+    case 3 :
+        Serial.print("da vao tra bong case3 \n");
+        speed_R_L(0.5, 0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 4;
+            straight = 1000;
+        }
+        break;
+    case 4 :
+        Serial.print("da vao tra bong case4 \n");
+        speed_R_L(0, 0, target_freq_l, target_freq_r);
+        x = 100;
+        straight -- ;
+        if(straight < 1){
+            TH = 5;
+            straight = 700;
+        }
+        break;
+    case 5 :
+        speed_R_L(-0.5, 0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 6;
+        }
+        break;
+    default:
+        x = 0;
+        speed_R_L(0, 0, target_freq_l, target_freq_r);
+        break;
+    }
 }

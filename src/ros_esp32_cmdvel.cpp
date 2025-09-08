@@ -20,7 +20,7 @@ rclc_support_t support;
 rclc_executor_t executor;
 
 #define LED_PIN 4
-#define RCCHECK(x) if((x) != RCL_RET_OK){Serial.println(" RCCHECK lỗi"); error_loop();}
+#define RCCHECK(x) if((x) != RCL_RET_OK){Serial.println(" ❌RCCHECK lỗi"); error_loop();}
 #define RCSOFTCHECK(x) if((x) != RCL_RET_OK){}
 
 void error_loop() {
@@ -32,7 +32,7 @@ void error_loop() {
 const char * ssid = "PTIT-RD-01";
 const char * password = "11246879";
 const char * ip_address = "192.168.0.131";
-const uint16_t port = 8888;
+const uint16_t port = 8887;
 // const char * ssid = "IEC lab";
 // const char * password = "roboticsptit";
 // const char * ip_address = "192.168.2.130";
@@ -47,8 +47,9 @@ void ROS_Send_Feedback_Odom() {
   odom_msg.header.stamp.nanosec = (now % 1000) * 1000000;
 
   freq_to_speed(freq_l, freq_r);
-  // Serial.printf("v = %.2f, w = %.2f\n", v_feedback,w_feedback);
+  
   odom_msg.twist.twist.linear.x = v_feedback; 
+  odom_msg.twist.twist.linear.y = finish;
   odom_msg.twist.twist.angular.z = w_feedback;
 
   RCSOFTCHECK(rcl_publish(&publisher_feedback, &odom_msg, NULL));
@@ -62,11 +63,15 @@ void subscription_callback(const void *msgin) {
   w = msg->angular.z;
   kt = msg->angular.x;
   if(kt > 0){
-    math_cung(180);
+    flag ++;
+  }
+  if(flag == 1){
+    TH =1;
     straight = 500;
-    straight2 = 600;
-    straight3 = 800;
-    straight4 = 700;
+    Serial.print("da vao 1 lan \n");
+  }
+  if(flag == 5 ){
+    flag =2;
   }
   // if(k>0){
   //   Serial.print("da nhan n");
@@ -87,8 +92,8 @@ void connectToWiFi() {
 }
 
 void ROS_Init() {
-  Serial.begin(115200);
-  delay(1000);
+  // Serial.begin(115200);
+  // delay(1000);
   connectToWiFi(); 
   set_microros_wifi_transports((char *)ssid, (char *)password, (char *)ip_address, port);
 
@@ -114,6 +119,7 @@ void ROS_Init() {
   RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
   RCCHECK(rclc_executor_add_subscription(&executor, &subscriber, &msg_sub, &subscription_callback, ON_NEW_DATA));
   Odometry_Init();
+  Serial.println("✅ ROS2 initialized");
 }
 
 void ROS_Spin() {
