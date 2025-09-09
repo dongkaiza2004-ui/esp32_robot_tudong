@@ -62,17 +62,6 @@ void subscription_callback(const void *msgin) {
   x = msg->linear.y;
   w = msg->angular.z;
   kt = msg->angular.x;
-  if(kt > 0){
-    flag ++;
-  }
-  if(flag == 1){
-    TH =1;
-    straight = 500;
-    Serial.print("da vao 1 lan \n");
-  }
-  if(flag == 5 ){
-    flag =2;
-  }
   // if(k>0){
   //   Serial.print("da nhan n");
   //   math_cung(n);

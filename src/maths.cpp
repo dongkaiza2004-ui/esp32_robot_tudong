@@ -11,6 +11,7 @@ float kt = 0;
 float straight = 0;
 int TH = 0;
 float ok = 0;
+float ok1 = 0;
 float finish;
 
 float base_freq = 0;
@@ -86,12 +87,12 @@ void math_control1(){
         straight-- ;
         if(straight < 1){
             TH = 3;
-            straight = 2200;
+            straight = 4000;
         }   
         break; 
     case 3 :
         Serial.print("da va case 3\n");
-        speed_R_L(0.2, 0, target_freq_l, target_freq_r);
+        speed_R_L(0.1, 0, target_freq_l, target_freq_r);
         straight -- ;
         if(straight < 1){
             TH = 4;
@@ -99,10 +100,12 @@ void math_control1(){
         break;
     
     default:
-        Serial.print("da va case 4\n");
-        finish = 1;
+        Serial.print("chuyen sang control3\n");
+        straight = 400;
         speed_R_L(0, 0, target_freq_l, target_freq_r);
         ok = 0;
+        TH = 1;
+        ok1 = 1;
         break;
     }
 }
@@ -124,7 +127,7 @@ void math_control2(){
         straight -- ;
         if(straight < 1){
             TH = 3;
-            straight = 700;
+            straight = 800;
         }   
         break; 
     case 3 :
@@ -156,6 +159,45 @@ void math_control2(){
     default:
         x = 0;
         speed_R_L(0, 0, target_freq_l, target_freq_r);
+        break;
+    }
+}
+void math_control3(){
+    switch (TH)
+    {
+    case 1:
+        Serial.print("da vao lay bong case 1\n");
+        speed_R_L(0.0, -0.5, target_freq_l, target_freq_r);
+        straight-- ;
+        if(straight < 1){
+            TH = 2;
+            straight = 400;
+        }   
+        break; 
+    case 2:
+        Serial.print("da vao lay bong case 2\n");
+        x = -200;
+        speed_R_L(0.1,0.0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 3;
+            straight = 1000;
+        }   
+        break; 
+    case 3 :
+        Serial.print("da vao tra bong case 3\n");
+        speed_R_L(0, 0, target_freq_l, target_freq_r);
+        straight -- ;
+        if(straight < 1){
+            TH = 4;
+        }
+        break;
+    default:
+        x = 0;
+        ok1 = 0;
+        kt = 1;
+        TH =1;
+        straight = 500;
         break;
     }
 }

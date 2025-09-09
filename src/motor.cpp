@@ -204,7 +204,7 @@ void Motor_Control(uint8_t motor, uint8_t speed, bool dir)
             ledcWrite(motor_x_pwmChannel, speed);
         }
         else if (BACKWARD == dir) {
-            Serial.println("backward\n");
+            // Serial.println("backward\n");
             // Serial.println("Motor L Backward");
             digitalWrite(X_MOTOR_INT_A, HIGH);
             digitalWrite(X_MOTOR_INT_B, LOW);

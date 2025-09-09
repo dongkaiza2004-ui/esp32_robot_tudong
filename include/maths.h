@@ -19,7 +19,9 @@ extern int flag;
 
 extern float straight;
 extern int TH;
+extern int TH1;
 extern float ok;
+extern float ok1;
 extern float finish;
 
 extern float v_feedback;
@@ -47,6 +49,7 @@ float speed_to_RPS(float v);
 void math_cung(float n);
 void math_control1();
 void math_control2();
+void math_control3();
 void speed_R_L(float v,float w,float &freq_l, float &freq_r);
 void freq_to_speed(float freq_l, float freq_r); 
 
